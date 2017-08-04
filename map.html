@@ -15,18 +15,18 @@
 
 <body>
     <div class="list">
-    <div class="banner">Recent Earthquakes by Time</div>
+    <div class="banner">Recent Earthquakes by Date</div>
     </div>
     
    <div id="map"></div>
-   
+   <div class="legend"><img src="images/legend.jpg" width="80"></img></div>
    <script type='text/javascript'>
        //<![CDATA[
 
        function initialize() {
           map = new google.maps.Map(document.getElementById('map'), {
               zoom: 2,
-              center: new google.maps.LatLng(2.8,-187.3),
+              center: new google.maps.LatLng(-4,-187.3),
               mapTypeId: 'terrain'
            });
         

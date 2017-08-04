@@ -16,6 +16,7 @@ html, body {
             background:#d35400;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 100;
+            font-size: 100%;
             color:white;
             vertical-align:middle;
             text-align:center;
@@ -29,6 +30,12 @@ html, body {
             margin-left:10px;
             border-bottom: 1px solid grey;
         }
+        .legend{
+         position: absolute; 
+         bottom:10px; 
+         left: 26%; 
+         z-index: 99; }
+        
         .magColor-1{
             background: #2CC990;
         }
