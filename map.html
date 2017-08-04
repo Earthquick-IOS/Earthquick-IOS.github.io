@@ -5,155 +5,17 @@
    <meta content="text/html; charset=utf-8" http-equiv="content-type">
    <meta content="noindex, nofollow" name="robots">
    <meta content="noindex, nofollow" name="googlebot">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp" type="text/javascript">
-   </script>
-   <script src="https://rawgit.com/googlemaps/v3-utility-library/master/richmarker/src/richmarker.js" type="text/javascript">
-   </script>
-   <style type="text/css">
-        html, body {
-        width: 100%; 
-        }
-        body {
-        margin: 0; }
-        
-        .list {
-        width: 25%; 
-        height: 800px;
-        float:left;
-        overflow:hidden; overflow-y:scroll;
-        
-        }
-        .quake{
-            background: white;
-            width: 100%;
-            height: 60px;
-            margin-left:10px;
-            border-bottom: 1px solid grey;
-        }
-        .magColor-1{
-            background: #2CC990;
-        }
-        .magColor-2{
-            background: #FCB941;
-        }
-        .magColor-3{
-            background: #EB6361;
-        }
-        .magColor-4{
-            background: #C82647;
-        }
-        .magColor-5{
-            background: #8A2D3C;
-        }
-        .magIcon{
-            left:50px;
-            border-radius: 10px;
-            margin:10px;
-            padding: 2px; 
-            width:35px;
-            height:35px;
-            font:white;
-            float:left;
-            text-align: center;
-            line-height: 35px;
-            color: white;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: lighter;
-            font-size: 90%;
-            vertical-align: middle;
-        }
-        .title{
-            position: relative;
-            -webkit-transform: translate(0px, -50%);
-            width:80%;
-            top:40%;
-            word-break: normal;
-            float:right;
-            text-align: left;
-            color: black;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 100;
-            font-size: 80%;
-        }
-        .time{
-            width:100%;
-            height:20px;
-            #background: orange;
-            font-size: 60%;
-            position:absolute;
-            bot:30px;
-        }
-          #map {
-            width: 75%;
-            height: 800px; 
-            float:right;
-            }
-
-            
-              svg.pulse-svg {
-                overflow: visible; }
-                svg.pulse-svg .first-circle, svg.pulse-svg .second-circle,
-                svg.pulse-svg .third-circle {
-                  fill: #f00;
-                  transform: scale(0.5);
-                  transform-origin: center center;
-                  animation: pulse-me 1s linear infinite; }
-                  svg.pulse-svg .second-circle {
-                    animation-delay: 1s; }
-                    svg.pulse-svg .third-circle {
-                      animation-delay: 2s; }
-
-       .pulse-css {
-        width: 10px;
-        height: 10px;
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        border-radius: 10px;
-        position: relative; }
-        
-        .pulse-css:before, .pulse-css:after {
-          content: '';
-          width: 10px;
-          height: 10px;
-          -webkit-border-radius: 10px;
-          -moz-border-radius: 10px;
-          border-radius: 10px;
-          background-color: inherit;
-          
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          margin: auto;
-          transform: scale(0.5);
-          transform-origin: center center;
-          animation: pulse-me 2s linear infinite; }
-          .pulse-css:after {
-            animation-delay: 1s; }
-
-       @keyframes pulse-me {
-        0% {
-          transform: scale(0.5);
-          opacity: 0;   }
-          50% {
-            opacity: 0.2;   }
-            70% {
-              opacity: 0.1;   }
-              100% {
-                transform: scale(5);
-                opacity: 0;   }
-       }
-
-   </style>
-
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoUvFvJEPeaslVIkG-9Gxl-X__ZazIhJI&v=3.exp" type="text/javascript"></script>
+   <script src="https://rawgit.com/googlemaps/v3-utility-library/master/richmarker/src/richmarker.js" type="text/javascript"></script>
+   <script type="text/javascript" src="https://npmcdn.com/parse/dist/parse.min.js"></script>
+   <link href="css/maps.css" rel="stylesheet">
    <title>Earthquake Map by Earthquick</title>
 </head>
 
 <body>
     <div class="list">
-    
+    <div class="banner">Recent Earthquakes by Time</div>
     </div>
     
    <div id="map"></div>
@@ -162,26 +24,28 @@
        //<![CDATA[
 
        function initialize() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
-          center: new google.maps.LatLng(2.8,-187.3),
-          mapTypeId: 'terrain'
-        });
+          map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 2,
+              center: new google.maps.LatLng(2.8,-187.3),
+              mapTypeId: 'terrain'
+           });
+        
+        Parse.initialize("ziqi.Earthquick");
+        Parse.serverURL = 'https://earthquick-server.herokuapp.com/parse'
 
-        // Create a <script> tag and set the USGS URL as the source.
-        var script = document.createElement('script');
-        // This example uses a local copy of the GeoJSON stored at
-        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-        document.getElementsByTagName('head')[0].appendChild(script);
+        var query = new Parse.Query("week_earthquake");
+        query.limit(1000)
+        query.find({
+            success: function(results) {
+
         
+        for (var i = 0; i < results.length; i++) {
         
-        window.eqfeed_callback = function(results) {
-        for (var i = 0; i < results.features.length; i++) {
-          var coords = results.features[i].geometry.coordinates;
+          var coords = results[i].attributes.geometry.coordinates;
           var latLng = new google.maps.LatLng(coords[1],coords[0]);
           
-          if (results.features[i].properties.mag <3){
+          
+          if (results[i].attributes.properties.mag <3){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-1"><\/div>',
@@ -189,7 +53,7 @@
                         map: map
                     });
             }
-          else if (results.features[i].properties.mag <4){
+          else if (results[i].attributes.properties.mag <4){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-2"><\/div>',
@@ -197,7 +61,7 @@
                         map: map
                     });
             }
-            else if (results.features[i].properties.mag <5){
+            else if (results[i].attributes.properties.mag <5){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-3"><\/div>',
@@ -205,7 +69,7 @@
                         map: map
                     });
             }
-            else if (results.features[i].properties.mag <6){
+            else if (results[i].attributes.properties.mag <6){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-4"><\/div>',
@@ -224,49 +88,48 @@
           
           
         }
-        console.log(results.features[0].properties.url)
-        var time = new Date(results.features[0].properties.time)
-        console.log (time.toLocaleString());
+
         $(document).ready(function(){
-            for (var i = 0; i < results.features.length; i++) {
-                var time = new Date(results.features[i].properties.time)
-                if (results.features[i].properties.mag <3){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-1">' + results.features[i].properties.mag.toFixed(1) + '</div><div class="title">' + results.features[i].properties.place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+            results.sort(function(a, b) {
+            a = new Date(a.attributes.properties.time);
+            b = new Date(b.attributes.properties.time);
+            return a>b ? -1 : a<b ? 1 : 0;
+        });
+            for (var i = 0; i < results.length; i++) {
+                var time = new Date(results[i].attributes.properties.time)
+                var place = results[i].attributes.properties.place
+                if (results[i].attributes.properties.mag <3){
+                    $(".list").append('<div class="quake"><div class="magIcon magColor-1">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
-                else if (results.features[i].properties.mag <4){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-2">' + results.features[i].properties.mag.toFixed(1) + '</div><div class="title">' + results.features[i].properties.place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                else if (results[i].attributes.properties.mag <4){
+                    $(".list").append('<div class="quake"><div class="magIcon magColor-2">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
-                else if (results.features[i].properties.mag <5){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-3">' + results.features[i].properties.mag.toFixed(1) + '</div><div class="title">' + results.features[i].properties.place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                else if (results[i].attributes.properties.mag <5){
+                    $(".list").append('<div class="quake"><div class="magIcon magColor-3">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
-                else if (results.features[i].properties.mag <6){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-4">' + results.features[i].properties.mag.toFixed(1) + '</div><div class="title">' + results.features[i].properties.place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                else if (results[i].attributes.properties.mag <6){
+                    $(".list").append('<div class="quake"><div class="magIcon magColor-4">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
                 else {
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-5">' + results.features[i].properties.mag.toFixed(1) + '</div><div class="title">' + results.features[i].properties.place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                    $(".list").append('<div class="quake"><div class="magIcon magColor-5">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
             }
         
         });
-      }
+      
+    },
+    error: function(error) {
+        alert("Error: " + error.code + " " + error.message);
+    }
+    });
+
+      
       }
        google.maps.event.addDomListener(window, 'load', initialize);
        
       
 
    </script> 
-   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj-VsMlvgsYg5jvflnjTMTBJ7xsPrUxdI">
-    </script>
-   <script>
-   console.log("haha")
-        // tell the embed parent frame the height of the content
-        if (window.parent && window.parent.parent){
-          window.parent.parent.postMessage(["resultsFrame", {
-            height: document.body.getBoundingClientRect().height,
-            slug: "onxkqcwq"
-          }], "*")
-        }
-   </script>
+
 </body>
 </html>

@@ -1,0 +1,145 @@
+html, body {
+        width: 100%; 
+        }
+        body {
+        margin: 0; }
+        
+        .list {
+        width: 25%; 
+        height: 800px;
+        float:left;
+        overflow:hidden; overflow-y:scroll;
+        }
+        .banner{
+            height: 30px;
+            width:100%;
+            background:#d35400;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 100;
+            color:white;
+            vertical-align:middle;
+            text-align:center;
+            line-height:30px;
+
+        }
+        .quake{
+            background: white;
+            width: 100%;
+            height: 60px;
+            margin-left:10px;
+            border-bottom: 1px solid grey;
+        }
+        .magColor-1{
+            background: #2CC990;
+        }
+        .magColor-2{
+            background: #FCB941;
+        }
+        .magColor-3{
+            background: #EB6361;
+        }
+        .magColor-4{
+            background: #C82647;
+        }
+        .magColor-5{
+            background: #8A2D3C;
+        }
+        .magIcon{
+            left:50px;
+            border-radius: 10px;
+            margin:10px;
+            padding: 2px; 
+            width:35px;
+            height:35px;
+            font:white;
+            float:left;
+            text-align: center;
+            line-height: 35px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: lighter;
+            font-size: 90%;
+            vertical-align: middle;
+        }
+        .title{
+            position: relative;
+            -webkit-transform: translate(0px, -50%);
+            width:80%;
+            top:40%;
+            word-break: normal;
+            float:right;
+            text-align: left;
+            color: black;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 100;
+            font-size: 80%;
+        }
+        .time{
+            width:100%;
+            height:20px;
+            #background: orange;
+            font-size: 60%;
+            position:absolute;
+            bot:30px;
+        }
+          #map {
+            width: 75%;
+            height: 800px; 
+            float:right;
+            }
+
+            
+              svg.pulse-svg {
+                overflow: visible; }
+                svg.pulse-svg .first-circle, svg.pulse-svg .second-circle,
+                svg.pulse-svg .third-circle {
+                  fill: #f00;
+                  transform: scale(0.5);
+                  transform-origin: center center;
+                  animation: pulse-me 1s linear infinite; }
+                  svg.pulse-svg .second-circle {
+                    animation-delay: 1s; }
+                    svg.pulse-svg .third-circle {
+                      animation-delay: 2s; }
+
+       .pulse-css {
+        width: 10px;
+        height: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        position: relative; }
+        
+        .pulse-css:before, .pulse-css:after {
+          content: '';
+          width: 10px;
+          height: 10px;
+          -webkit-border-radius: 10px;
+          -moz-border-radius: 10px;
+          border-radius: 10px;
+          background-color: inherit;
+          
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin: auto;
+          transform: scale(0.5);
+          transform-origin: center center;
+          animation: pulse-me 2s linear infinite; }
+          .pulse-css:after {
+            animation-delay: 1s; }
+
+       @keyframes pulse-me {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;   }
+          50% {
+            opacity: 0.2;   }
+            70% {
+              opacity: 0.1;   }
+              100% {
+                transform: scale(5);
+                opacity: 0;   }
+       }
