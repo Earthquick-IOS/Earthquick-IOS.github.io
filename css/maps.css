@@ -6,7 +6,7 @@ html, body {
         
         .list {
         width: 25%; 
-        height: 1000px;
+        height: 900px;
         float:left;
         overflow:hidden; overflow-y:scroll;
         }
@@ -32,7 +32,7 @@ html, body {
         }
         .legend{
          position: absolute; 
-         bottom:-20px; 
+         bottom:10px; 
          left: 26%; 
          z-index: 99; }
         
@@ -91,7 +91,7 @@ html, body {
         }
           #map {
             width: 75%;
-            height: 1000px; 
+            height: 900px; 
             float:right;
             }
 
