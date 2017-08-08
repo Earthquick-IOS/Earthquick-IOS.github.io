@@ -29,7 +29,9 @@
    <div class="legend"><img src="images/legend.jpg" width="80"></img></div>
    <script type='text/javascript'>
        //<![CDATA[
-
+        
+        
+        var globalMarker = []
        function initialize() {
           map = new google.maps.Map(document.getElementById('map'), {
               zoom: 2,
@@ -44,85 +46,109 @@
         query.limit(1000)
         query.find({
             success: function(results) {
-
+            results.sort(function(a, b) {
+            a = new Date(a.attributes.properties.time);
+            b = new Date(b.attributes.properties.time);
+            return a>b ? -1 : a<b ? 1 : 0;
+        });
         
         for (var i = 0; i < results.length; i++) {
         
           var coords = results[i].attributes.geometry.coordinates;
           var latLng = new google.maps.LatLng(coords[1],coords[0]);
-          
+          var place = results[i].attributes.properties.title
           
           if (results[i].attributes.properties.mag <3){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-1"><\/div>',
                         shadow: 0,
-                        map: map
+                        map: map,
+                        title: place
                     });
+                    globalMarker.push(marker);
+                    
             }
           else if (results[i].attributes.properties.mag <4){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-2"><\/div>',
                         shadow: 0,
-                        map: map
+                        map: map,
+                        title: place
                     });
+                    globalMarker.push(marker);
             }
             else if (results[i].attributes.properties.mag <5){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-3"><\/div>',
                         shadow: 0,
-                        map: map
+                        map: map,
+                        title: place
                     });
+                    globalMarker.push(marker);
             }
             else if (results[i].attributes.properties.mag <6){
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-4"><\/div>',
                         shadow: 0,
-                        map: map
+                        map: map,
+                        title: place
                     });
+                    globalMarker.push(marker);
             }
             else {
                     var marker = new RichMarker({
                         position: latLng,
                         content: '<div class="pulse-css magColor-5"><\/div>',
                         shadow: 0,
-                        map: map
+                        map: map,
+                        title: place
                     });
+                    globalMarker.push(marker);
             }
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(globalMarker[i], 'click', function (e) {
+                infowindow.setContent(this.title); // label for  pin.
+                infowindow.open(map, this);
+            });
           
           
         }
-
+        
         $(document).ready(function(){
-            results.sort(function(a, b) {
-            a = new Date(a.attributes.properties.time);
-            b = new Date(b.attributes.properties.time);
-            return a>b ? -1 : a<b ? 1 : 0;
-        });
+            
             for (var i = 0; i < results.length; i++) {
                 var time = new Date(results[i].attributes.properties.time)
                 var place = results[i].attributes.properties.place
                 if (results[i].attributes.properties.mag <3){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-1">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                    $(".list").append('<div class="quake" onclick="zoomIn(' + i + ')"><div class="magIcon magColor-1">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
                 else if (results[i].attributes.properties.mag <4){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-2">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                    $(".list").append('<div class="quake" onclick="zoomIn(' + i + ')"><div class="magIcon magColor-2">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
                 else if (results[i].attributes.properties.mag <5){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-3">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                    $(".list").append('<div class="quake" onclick="zoomIn(' + i + ')"><div class="magIcon magColor-3">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
                 else if (results[i].attributes.properties.mag <6){
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-4">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                    $(".list").append('<div class="quake" onclick="zoomIn(' + i + ')"><div class="magIcon magColor-4">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
                 else {
-                    $(".list").append('<div class="quake"><div class="magIcon magColor-5">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
+                    $(".list").append('<div class="quake" onclick="zoomIn(' + i + ')"><div class="magIcon magColor-5">' + results[i].attributes.properties.mag.toFixed(1) + '</div><div class="title">' + place + '<div class="time">' + time.toLocaleString() + '</div></div></div>');
                 }
             }
+            $('#spn_hol').hide();
         
         });
+        $(window).ready(function() {
+            $('#spn_hol').hide();
+        });
+        
+
+        
+        
       
     },
     error: function(error) {
@@ -132,6 +158,14 @@
 
       
       }
+      
+      function zoomIn(index) {
+            google.maps.event.trigger(globalMarker[index],'click');
+            map.setCenter(globalMarker[index].getPosition());
+            console.log (globalMarker[index].getPosition().lat())
+            console.log (globalMarker[index].getPosition().lng())
+            map.setZoom(3);
+        }
        google.maps.event.addDomListener(window, 'load', initialize);
        
       

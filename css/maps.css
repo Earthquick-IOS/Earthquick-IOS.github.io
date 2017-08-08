@@ -30,6 +30,11 @@ html, body {
             height: 60px;
             margin-left:10px;
             border-bottom: 1px solid grey;
+            cursor: pointer;
+        }
+        .quake:hover{
+            background-color:rgba(0, 0, 0, 0.1);
+            
         }
         .legend{
          position: absolute; 
